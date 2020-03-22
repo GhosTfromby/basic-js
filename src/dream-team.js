@@ -1,5 +1,4 @@
 module.exports = function createDreamTeam(members) {
-  throw 'Not implemented';
   if (!Array.isArray(members)) return false
 
   let team = members.map(name => {
