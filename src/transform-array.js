@@ -1,33 +1,32 @@
-module.exports = function transform(arr) {
-    let transformedArr = [];
-    if (toString.call(arr).slice(8, -1) !== 'Array') {
-        throw new Error;
-    }
-    if (arr.length === 0) return arr;
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] === '--discard-next') {
-            i++;
-        } else {
-            if (arr[i] === '--discard-prev') {
-                transformedArr.pop();
-            } else {
-                if (arr[i] === '--double-next') {
-                    if (i + 1 !== arr.length)
-                        transformedArr.push(arr[i + 1]);
-                } else {
-                    if (arr[i] === '--double-prev') {
-                        if (i - 1 > 0)
-                            transformedArr.push(arr[i - 1]);
-                    } else {
-                        transformedArr.push(arr[i]);
+module.exports = function transform(array) {
+    if(!Array.isArray(array)) throw 'Error';
 
-                    }
-                }
-
-            }
-
+    for(let index = 0;index <= array.length; index++){
+           switch(array[index]){
+               case '--double-next':
+                   index+1 < array.length ? (array[index] = array[index+1]) : array.splice(index,1);
+                       index = -1;
+                   break;
+               case '--double-prev':
+                   index-1 >= 0 ? (array[index] = array[index-1]) : array.splice(index,1)
+                       index = -1;
+                   break;
+           }
         }
-
+               
+   
+    for(let index = 0;index <= array.length; index++){
+        switch(array[index]){
+            case '--discard-prev':
+                    index-1 >= 0 ? array.splice(index-1,2) :  array.splice(index,1)
+                   index = -1;
+                break;  
+            case '--discard-next':
+                index+1 < array.length ? array.splice(index,2): array.splice(index,1);
+                    index = -1;
+            break;
+        }
+        
     }
-    return transformedArr;
+    return array; 
 };
